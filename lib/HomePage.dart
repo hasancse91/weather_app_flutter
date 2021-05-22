@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weather_app_flutter/TextLabelStyle.dart';
@@ -26,6 +25,7 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         margin: EdgeInsets.all(20.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
                 margin: EdgeInsets.only(bottom: 20.0),
@@ -53,12 +53,9 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 )),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                '21 May, 2021 - 09:58 PM',
-                style: TextStyle(color: Colors.black, fontSize: 20),
-              ),
+            Text(
+              '21 May, 2021 - 09:58 PM',
+              style: TextStyle(color: Colors.black, fontSize: 20),
             ),
             Container(
               child: Row(
@@ -106,54 +103,9 @@ class _HomePageState extends State<HomePage> {
                 1: FlexColumnWidth(6),
               },
               children: [
-                TableRow(children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 8, bottom: 8),
-                    child: Text(
-                      'Humidity',
-                      style: TextLabelStyle(),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 8, bottom: 8),
-                    child: Text(
-                      '73%',
-                      style: TextValueStyle(),
-                    ),
-                  ),
-                ]),
-                TableRow(children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 8, bottom: 8),
-                    child: Text(
-                      'Pressure',
-                      style: TextLabelStyle(),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 8, bottom: 8),
-                    child: Text(
-                      '999.0 mBar',
-                      style: TextValueStyle(),
-                    ),
-                  ),
-                ]),
-                TableRow(children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 8, bottom: 8),
-                    child: Text(
-                      'Visibility',
-                      style: TextLabelStyle(),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 8, bottom: 8),
-                    child: Text(
-                      '4.0 KM',
-                      style: TextValueStyle(),
-                    ),
-                  ),
-                ]),
+                getWeatherInfoPropertyWidget("Humidity", "73%"),
+                getWeatherInfoPropertyWidget("Pressure", "999.0 mBar"),
+                getWeatherInfoPropertyWidget("Visibility", "4.0 KM"),
               ],
             ),
             Spacer(),
@@ -206,5 +158,24 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  TableRow getWeatherInfoPropertyWidget(String label, String value) {
+    return TableRow(children: [
+      Padding(
+        padding: EdgeInsets.only(top: 8, bottom: 8),
+        child: Text(
+          label,
+          style: TextLabelStyle(),
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(top: 8, bottom: 8),
+        child: Text(
+          value,
+          style: TextValueStyle(),
+        ),
+      ),
+    ]);
   }
 }
