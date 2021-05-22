@@ -156,6 +156,52 @@ class _HomePageState extends State<HomePage> {
                 ]),
               ],
             ),
+            Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      'Sunrise',
+                      style: TextLabelStyle(),
+                    ),
+                    Container(
+                      child: Image.asset(
+                        'assets/sunrise.png',
+                        width: 100,
+                        height: 100,
+                      ),
+                      margin: EdgeInsets.only(top: 12.0, bottom: 12.0),
+                    ),
+                    Text(
+                      '05:14 AM',
+                      style: TextValueStyle(),
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text(
+                      'Sunset',
+                      style: TextLabelStyle(),
+                    ),
+                    Container(
+                      child: Image.asset(
+                        'assets/sunset.png',
+                        width: 100,
+                        height: 100,
+                      ),
+                      margin: EdgeInsets.only(top: 12.0, bottom: 12.0),
+                    ),
+                    Text(
+                      '06:49 PM',
+                      style: TextValueStyle(),
+                    ),
+                  ],
+                ),
+              ],
+            )
           ],
         ),
       ),
