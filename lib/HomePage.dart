@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:weather_app_flutter/City.dart';
 import 'package:weather_app_flutter/TextLabelStyle.dart';
 
 import 'TextValueStyle.dart';
@@ -14,7 +18,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String dropdownButtonValue = 'Dhaka';
+  List<City> cityList = [];
+  City selectedCity;
+
+  void readCityList() async {
+    String response = await rootBundle.loadString('assets/city_list.json');
+    final data = await json.decode(response) as List<dynamic>;
+    setState(() {
+      cityList = data.map((city) => City.fromJson(city)).toList();
+      selectedCity = cityList[0];
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    readCityList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,23 +52,24 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    DropdownButton<String>(
-                      value: dropdownButtonValue,
-                      onChanged: (String newDropdownValue) {
+                    DropdownButton<City>(
+                      value: selectedCity,
+                      onChanged: (City newCity) {
                         setState(() {
-                          dropdownButtonValue = newDropdownValue;
+                          selectedCity = newCity;
                         });
                       },
-                      items: <String>['Dhaka', 'Tokyo', 'New York', 'Tehran']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
+                      items: cityList.map((City city) {
+                        return DropdownMenuItem<City>(
+                          value: city,
+                          child: Text(city.name),
                         );
                       }).toList(),
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        print(selectedCity.name);
+                      },
                       child: Text('VIEW WEATHER'),
                     ),
                   ],
@@ -120,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Container(
                       child: Image.asset(
-                        'assets/sunrise.png',
+                        'images/sunrise.png',
                         width: 100,
                         height: 100,
                       ),
@@ -140,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Container(
                       child: Image.asset(
-                        'assets/sunset.png',
+                        'images/sunset.png',
                         width: 100,
                         height: 100,
                       ),
