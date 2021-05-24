@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -28,6 +29,20 @@ class _HomePageState extends State<HomePage> {
       cityList = data.map((city) => City.fromJson(city)).toList();
       selectedCity = cityList[0];
     });
+  }
+
+  void fetchWeatherInfo(City city) async {
+    try {
+      var dio = Dio();
+      dio.options.headers = {'appid': 'd450a4a574372bd12f2fa308bf3cf15a'};
+      var response = dio.get(
+        'http://api.openweathermap.org/data/2.5/weather',
+        queryParameters: {'id': city.id},
+      );
+      print("Response: ${response}");
+    } catch (e) {
+      print("Error: $e");
+    }
   }
 
   @override
@@ -68,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        print(selectedCity.name);
+                        fetchWeatherInfo(selectedCity);
                       },
                       child: Text('VIEW WEATHER'),
                     ),
