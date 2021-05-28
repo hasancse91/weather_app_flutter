@@ -6,5 +6,5 @@ class TextLabelStyle extends TextStyle {
   Color get color => Colors.grey[700];
 
   @override
-  double get fontSize => 20;
+  double get fontSize => 16;
 }

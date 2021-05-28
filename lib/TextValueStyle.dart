@@ -6,5 +6,5 @@ class TextValueStyle extends TextStyle {
   Color get color => Colors.black;
 
   @override
-  double get fontSize => 20;
+  double get fontSize => 16;
 }

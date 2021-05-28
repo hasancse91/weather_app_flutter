@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:weather_app_flutter/ApiBaseHelper.dart';
 import 'package:weather_app_flutter/City.dart';
 import 'package:weather_app_flutter/TextLabelStyle.dart';
 
@@ -33,15 +34,27 @@ class _HomePageState extends State<HomePage> {
 
   void fetchWeatherInfo(City city) async {
     try {
-      var dio = Dio();
-      dio.options.headers = {'appid': 'd450a4a574372bd12f2fa308bf3cf15a'};
-      var response = dio.get(
-        'http://api.openweathermap.org/data/2.5/weather',
-        queryParameters: {'id': city.id},
-      );
-      print("Response: ${response}");
+      var apiBaseHelper = ApiBaseHelper();
+      // var response = await apiBaseHelper.getWeatherInfo(1235);
+      print("Response: ${await apiBaseHelper.getWeatherInfo(1235)}");
     } catch (e) {
       print("Error: $e");
+    }
+  }
+
+  void getDummyUserFromRealApiCall(int cityId) async {
+    try {
+      // var response = await Dio().get('https://randomuser.me/api/');
+      var response = await Dio().get(
+        'http://api.openweathermap.org/data/2.5/weather',
+        queryParameters: {
+          'id': cityId,
+          'appid': 'd450a4a574372bd12f2fa308bf3cf15a'
+        },
+      );
+      print(response);
+    } catch (e) {
+      print("Error: $e}");
     }
   }
 
@@ -63,7 +76,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
-                margin: EdgeInsets.only(bottom: 20.0),
+                margin: EdgeInsets.only(bottom: 16.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -83,7 +96,12 @@ class _HomePageState extends State<HomePage> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        fetchWeatherInfo(selectedCity);
+                        // fetchWeatherInfo(selectedCity);
+                        getDummyUserFromRealApiCall(selectedCity.id);
+                        // ApiClient client = ApiClient();
+                        // var endpointProvider = EndpointProvider(client.init());
+                        // var response = endpointProvider.getWeatherInfo(selectedCity.id);
+                        // print("RESPONSE: ${await endpointProvider.getWeatherInfo(selectedCity.id)}");
                       },
                       child: Text('VIEW WEATHER'),
                     ),
@@ -91,7 +109,7 @@ class _HomePageState extends State<HomePage> {
                 )),
             Text(
               '21 May, 2021 - 09:58 PM',
-              style: TextStyle(color: Colors.black, fontSize: 20),
+              style: TextStyle(color: Colors.black, fontSize: 16),
             ),
             Container(
               child: Row(
@@ -99,13 +117,13 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     child: Text(
                       '30',
-                      style: TextStyle(fontSize: 100, color: Colors.teal),
+                      style: TextStyle(fontSize: 80, color: Colors.teal),
                     ),
-                    margin: EdgeInsets.only(top: 20),
+                    margin: EdgeInsets.only(top: 10),
                   ),
                   Text(
                     '°C',
-                    style: TextStyle(fontSize: 50, color: Colors.teal),
+                    style: TextStyle(fontSize: 35, color: Colors.teal),
                   ),
                   Spacer(),
                   Column(
@@ -114,8 +132,8 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Image.network(
                         'https://static.thenounproject.com/png/967229-200.png',
-                        width: 80,
-                        height: 80,
+                        width: 60,
+                        height: 60,
                       ),
                       Text('Haze'),
                     ],
@@ -127,16 +145,16 @@ class _HomePageState extends State<HomePage> {
               alignment: Alignment.topLeft,
               child: Text(
                 'Dhaka, BD',
-                style: TextStyle(color: Colors.teal, fontSize: 25),
+                style: TextStyle(color: Colors.teal, fontSize: 20),
               ),
             ),
             SizedBox(
-              height: 10,
+              height: 16,
             ),
             Table(
               columnWidths: {
-                0: FlexColumnWidth(3),
-                1: FlexColumnWidth(6),
+                0: FlexColumnWidth(2),
+                1: FlexColumnWidth(5),
               },
               children: [
                 getWeatherInfoPropertyWidget("Humidity", "73%"),
@@ -200,16 +218,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   TableRow getWeatherInfoPropertyWidget(String label, String value) {
+    var margin = 4.0;
     return TableRow(children: [
       Padding(
-        padding: EdgeInsets.only(top: 8, bottom: 8),
+        padding: EdgeInsets.only(top: margin, bottom: margin),
         child: Text(
           label,
           style: TextLabelStyle(),
         ),
       ),
       Padding(
-        padding: EdgeInsets.only(top: 8, bottom: 8),
+        padding: EdgeInsets.only(top: margin, bottom: margin),
         child: Text(
           value,
           style: TextValueStyle(),
