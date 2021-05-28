@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:weather_app_flutter/ApiBaseHelper.dart';
-import 'package:weather_app_flutter/ApiClient.dart';
 import 'package:weather_app_flutter/City.dart';
-import 'package:weather_app_flutter/EndpointProvider.dart';
 import 'package:weather_app_flutter/TextLabelStyle.dart';
 
 import 'TextValueStyle.dart';
