@@ -4,8 +4,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:weather_app_flutter/ApiBaseHelper.dart';
+import 'package:weather_app_flutter/ApiClient.dart';
 import 'package:weather_app_flutter/City.dart';
+import 'package:weather_app_flutter/EndpointProvider.dart';
 import 'package:weather_app_flutter/TextLabelStyle.dart';
 
 import 'TextValueStyle.dart';
@@ -32,27 +35,18 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void fetchWeatherInfo(City city) async {
-    try {
-      var apiBaseHelper = ApiBaseHelper();
-      // var response = await apiBaseHelper.getWeatherInfo(1235);
-      print("Response: ${await apiBaseHelper.getWeatherInfo(1235)}");
-    } catch (e) {
-      print("Error: $e");
-    }
-  }
-
   void getDummyUserFromRealApiCall(int cityId) async {
     try {
       // var response = await Dio().get('https://randomuser.me/api/');
-      var response = await Dio().get(
+      var dio = Dio();
+      dio.interceptors.add(PrettyDioLogger());
+      var response = await dio.get(
         'http://api.openweathermap.org/data/2.5/weather',
         queryParameters: {
           'id': cityId,
           'appid': 'd450a4a574372bd12f2fa308bf3cf15a'
         },
       );
-      print(response);
     } catch (e) {
       print("Error: $e}");
     }
