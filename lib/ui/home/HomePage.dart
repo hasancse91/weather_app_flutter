@@ -1,14 +1,11 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:weather_app_flutter/City.dart';
-import 'package:weather_app_flutter/TextLabelStyle.dart';
-
-import 'TextValueStyle.dart';
+import 'package:weather_app_flutter/ui/home/City.dart';
+import 'package:weather_app_flutter/core/text_style.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -36,7 +33,8 @@ class _HomePageState extends State<HomePage> {
     try {
       // var response = await Dio().get('https://randomuser.me/api/');
       var dio = Dio();
-      dio.interceptors.add(PrettyDioLogger());
+      dio.interceptors
+          .add(PrettyDioLogger(requestHeader: true, responseHeader: true));
       var response = await dio.get(
         'http://api.openweathermap.org/data/2.5/weather',
         queryParameters: {
@@ -100,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                 )),
             Text(
               '21 May, 2021 - 09:58 PM',
-              style: TextStyle(color: Colors.black, fontSize: 16),
+              style: valueTextStyle,
             ),
             Container(
               child: Row(
@@ -161,7 +159,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Text(
                       'Sunrise',
-                      style: TextLabelStyle(),
+                      style: labelTextStyle,
                     ),
                     Container(
                       child: Image.asset(
@@ -173,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Text(
                       '05:14 AM',
-                      style: TextValueStyle(),
+                      style: valueTextStyle,
                     ),
                   ],
                 ),
@@ -181,7 +179,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Text(
                       'Sunset',
-                      style: TextLabelStyle(),
+                      style: labelTextStyle,
                     ),
                     Container(
                       child: Image.asset(
@@ -193,7 +191,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Text(
                       '06:49 PM',
-                      style: TextValueStyle(),
+                      style: valueTextStyle,
                     ),
                   ],
                 ),
@@ -215,14 +213,14 @@ class _HomePageState extends State<HomePage> {
         padding: EdgeInsets.only(top: margin, bottom: margin),
         child: Text(
           label,
-          style: TextLabelStyle(),
+          style: labelTextStyle,
         ),
       ),
       Padding(
-        padding: EdgeInsets.only(top: margin, bottom: margin),
+        padding: EdgeInsets.symmetric(vertical: margin),
         child: Text(
           value,
-          style: TextValueStyle(),
+          style: valueTextStyle,
         ),
       ),
     ]);

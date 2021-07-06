@@ -63,7 +63,7 @@ packages:
     source: hosted
     version: "1.8.0"
   pretty_dio_logger:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: pretty_dio_logger
       url: "https://pub.dartlang.org"
