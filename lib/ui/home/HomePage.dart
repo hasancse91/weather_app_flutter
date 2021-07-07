@@ -8,6 +8,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:weather_app_flutter/core/text_style.dart';
 import 'package:weather_app_flutter/ui/home/City.dart';
 import 'package:weather_app_flutter/ui/home/sun_time_table.dart';
+import 'package:weather_app_flutter/ui/home/weather.dart';
 import 'package:weather_app_flutter/ui/home/weather_property.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,7 +22,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<City> cityList = [];
-  late City selectedCity;
+  City? selectedCity;
+
+  bool isWeatherDataLoaded = false;
+
+  late Weather weather;
 
   @override
   void initState() {
@@ -41,35 +46,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _getInputSection(),
-            Text('21 May, 2021 - 09:58 PM', style: valueTextStyle),
-            _getTemperatureRelatedRow(),
-            Text('Dhaka, BD',
-                style: TextStyle(color: Colors.teal, fontSize: 20)),
-            SizedBox(
-              height: 16,
-            ),
-            WeatherProperty(label: "Humidity", value: "73%"),
-            WeatherProperty(label: "Pressure", value: "999.0 mBar"),
-            WeatherProperty(label: "Visibility", value: "4.0 KM"),
-            Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SunTimeTable(
-                  label: "Sunrise",
-                  value: '05:14 AM',
-                  imagePath: 'images/sunrise.png',
-                ),
-                SunTimeTable(
-                  label: "Sunset",
-                  value: '06:49 PM',
-                  imagePath: 'images/sunset.png',
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            )
+            _getBodyContent(),
           ],
         ),
       ),
@@ -85,7 +62,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void getDummyUserFromRealApiCall(int cityId) async {
+  void getDummyUserFromRealApiCall(int? cityId) async {
     try {
       // var response = await Dio().get('https://randomuser.me/api/');
       var dio = Dio();
@@ -98,6 +75,14 @@ class _HomePageState extends State<HomePage> {
           'appid': 'd450a4a574372bd12f2fa308bf3cf15a'
         },
       );
+      setState(() {
+        isWeatherDataLoaded = true;
+        weather = Weather(
+            weatherLastUpdatedTime: 'dflk', temperature, weatherDescription,
+            weatherDescriptionIcon, location, humidity, pressure, visibility,
+            sunriseTime, sunsetTime)
+        weather.humidity = '67%';
+      });
     } catch (e) {
       print("Error: $e}");
     }
@@ -109,32 +94,70 @@ class _HomePageState extends State<HomePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            DropdownButton<City>(
-              value: selectedCity,
-              onChanged: (City? newCity) {
-                setState(() {
-                  if (newCity != null) selectedCity = newCity;
-                });
-              },
-              items: cityList.map((City city) {
-                return DropdownMenuItem<City>(
-                  value: city,
-                  child: Text(city.name),
-                );
-              }).toList(),
-            ),
+            if (selectedCity != null)
+              DropdownButton<City>(
+                value: selectedCity,
+                onChanged: (City? newCity) {
+                  setState(() {
+                    if (newCity != null) selectedCity = newCity;
+                  });
+                },
+                items: cityList.map((City city) {
+                  return DropdownMenuItem<City>(
+                    value: city,
+                    child: Text(city.name),
+                  );
+                }).toList(),
+              )
+            else
+              Container(),
             ElevatedButton(
               onPressed: () {
                 // fetchWeatherInfo(selectedCity);
-                getDummyUserFromRealApiCall(selectedCity.id);
-                // ApiClient client = ApiClient();
-                // var endpointProvider = EndpointProvider(client.init());
-                // var response = endpointProvider.getWeatherInfo(selectedCity.id);
-                // print("RESPONSE: ${await endpointProvider.getWeatherInfo(selectedCity.id)}");
+                getDummyUserFromRealApiCall(selectedCity?.id);
               },
               child: Text('VIEW WEATHER'),
             ),
           ],
+        ));
+  }
+
+  _getBodyContent() {
+    return Visibility(
+        visible: isWeatherDataLoaded,
+        child: Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(weather.weatherLastUpdatedTime, style: valueTextStyle),
+              _getTemperatureRelatedRow(),
+              Text(weather.location,
+                  style: TextStyle(color: Colors.teal, fontSize: 20)),
+              SizedBox(height: 16),
+              WeatherProperty(label: "Humidity", value: weather.humidity),
+              WeatherProperty(label: "Pressure", value: weather.pressure),
+              WeatherProperty(label: "Visibility", value: weather.visibility),
+              Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SunTimeTable(
+                    label: "Sunrise",
+                    value: weather.sunriseTime,
+                    imagePath: 'images/sunrise.png',
+                  ),
+                  SunTimeTable(
+                    label: "Sunset",
+                    value: weather.sunsetTime,
+                    imagePath: 'images/sunset.png',
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              )
+            ],
+          ),
         ));
   }
 
@@ -144,7 +167,7 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           Container(
             child: Text(
-              '30',
+              weather.temperature,
               style: TextStyle(fontSize: 80, color: Colors.teal),
             ),
             margin: EdgeInsets.only(top: 10),
@@ -159,35 +182,12 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.network(
-                'https://static.thenounproject.com/png/967229-200.png',
-                width: 60,
-                height: 60,
-              ),
-              Text('Haze'),
+                  weather.weatherDescriptionIcon, width: 60, height: 60),
+              Text(weather.weatherDescription),
             ],
           )
         ],
       ),
     );
-  }
-
-  TableRow getWeatherInfoPropertyWidget(String label, String value) {
-    var margin = 4.0;
-    return TableRow(children: [
-      Padding(
-        padding: EdgeInsets.only(top: margin, bottom: margin),
-        child: Text(
-          label,
-          style: labelTextStyle,
-        ),
-      ),
-      Padding(
-        padding: EdgeInsets.symmetric(vertical: margin),
-        child: Text(
-          value,
-          style: valueTextStyle,
-        ),
-      ),
-    ]);
   }
 }
