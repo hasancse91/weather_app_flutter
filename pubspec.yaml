@@ -13,6 +13,7 @@ dependencies:
 
 dev_dependencies:
   pretty_dio_logger: ^1.1.1
+  logger: ^1.0.0
 
 flutter:
   uses-material-design: true

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app_flutter/core/text_style.dart';
 
-class SunTimeTable extends StatelessWidget {
+class ItemSunTime extends StatelessWidget {
   final String label;
   final String value;
   final String imagePath;
 
-  const SunTimeTable({
+  const ItemSunTime({
     Key? key,
     required this.label,
     required this.value,

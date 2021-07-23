@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app_flutter/core/text_style.dart';
+import 'package:weather_app_flutter/ui/home/item_weather_property.dart';
 
 class WeatherProperty extends StatelessWidget {
-  final String label;
-  final String value;
+  final String humidity;
+  final String pressure;
+  final String visibility;
 
   const WeatherProperty({
     Key? key,
-    required this.label,
-    required this.value,
+    required this.humidity,
+    required this.pressure,
+    required this.visibility,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 4, bottom: 4),
-      child: Row(children: [
-        Text(label, style: labelTextStyle),
-        SizedBox(width: 24),
-        Text(value, style: valueTextStyle),
-      ]),
+    return Column(
+      children: [
+        ItemWeatherProperty(label: "Humidity", value: humidity),
+        ItemWeatherProperty(label: "Pressure", value: pressure),
+        ItemWeatherProperty(label: "Visibility", value: visibility)
+      ],
     );
   }
 }
