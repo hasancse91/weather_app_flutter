@@ -2,32 +2,20 @@ import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:weather_app_flutter/network/WeatherApi.dart';
-import 'package:weather_app_flutter/ui/home/weather.dart';
+import 'package:weather_app_flutter/ui/home/model/weather_data.dart';
+import 'package:weather_app_flutter/ui/home/model/weather_response.dart';
 
 class WeatherApiImpl implements WeatherApi {
   var logger = Logger();
 
   @override
-  Weather? getWeatherInfo(int? cityId) {
+  Future<WeatherData>? getWeatherInfo(int? cityId) {
     logger.d("Method called");
 
-    getWeather(cityId);
-
-    return Weather(
-        weatherLastUpdatedTime: "07 July, 2021 - 10:00 AM",
-        temperature: "30",
-        weatherDescription: "Haze",
-        weatherDescriptionIcon:
-            "https://static.thenounproject.com/png/778835-200.png",
-        location: "Dhaka, BD",
-        humidity: "75%",
-        pressure: "65bLD",
-        visibility: "120 M",
-        sunriseTime: "05:16 AM",
-        sunsetTime: "06:50 PM");
+    return getWeather(cityId);
   }
 
-  void getWeather(int? cityId) async {
+  Future<WeatherData> getWeather(int? cityId) async {
     try {
       var dio = Dio();
       dio.interceptors
@@ -41,8 +29,12 @@ class WeatherApiImpl implements WeatherApi {
       );
 
       logger.d(response);
+
+      return Future.value(
+          WeatherResponse.fromJson(response.data).toWeatherData());
     } catch (e) {
-      print("Error: $e}");
+      logger.e(e);
+      throw e;
     }
   }
 }

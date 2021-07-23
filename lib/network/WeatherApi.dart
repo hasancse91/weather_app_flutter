@@ -1,5 +1,5 @@
-import 'package:weather_app_flutter/ui/home/weather.dart';
+import 'package:weather_app_flutter/ui/home/model/weather_data.dart';
 
 class WeatherApi {
-  Weather? getWeatherInfo(int? cityId) {}
+  Future<WeatherData>? getWeatherInfo(int? cityId) {}
 }

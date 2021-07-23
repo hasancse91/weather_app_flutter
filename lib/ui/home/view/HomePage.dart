@@ -7,10 +7,10 @@ import 'package:logger/logger.dart';
 import 'package:weather_app_flutter/core/text_style.dart';
 import 'package:weather_app_flutter/network/WeatherApi.dart';
 import 'package:weather_app_flutter/network/WeatherApiImpl.dart';
-import 'package:weather_app_flutter/ui/home/City.dart';
-import 'package:weather_app_flutter/ui/home/sun_time.dart';
-import 'package:weather_app_flutter/ui/home/weather.dart';
-import 'package:weather_app_flutter/ui/home/weather_property.dart';
+import 'package:weather_app_flutter/ui/home/model/City.dart';
+import 'package:weather_app_flutter/ui/home/model/weather_data.dart';
+import 'package:weather_app_flutter/ui/home/widget/sun_time.dart';
+import 'package:weather_app_flutter/ui/home/widget/weather_property.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
 
   bool isWeatherDataLoaded = false;
 
-  Weather? weather;
+  WeatherData? weather;
   late WeatherApi weatherApi;
 
   @override
@@ -73,9 +73,11 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             _getCityDropdown(),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                var weatherTemp =
+                    await weatherApi.getWeatherInfo(selectedCity?.id);
                 setState(() {
-                  weather = weatherApi.getWeatherInfo(selectedCity?.id)!;
+                  weather = weatherTemp;
                   Logger().d(weather);
                   isWeatherDataLoaded = true;
                 });
@@ -110,9 +112,9 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(weather!.weatherLastUpdatedTime, style: valueTextStyle),
+              Text(weather!.dateTime, style: valueTextStyle),
               _getTemperatureRow(),
-              Text(weather!.location,
+              Text(weather!.cityAndCountry,
                   style: TextStyle(color: Colors.teal, fontSize: 20)),
               SizedBox(height: 16),
               WeatherProperty(
@@ -122,8 +124,8 @@ class _HomePageState extends State<HomePage> {
               ),
               Spacer(),
               SunTime(
-                sunrise: weather!.sunriseTime,
-                sunset: weather!.sunsetTime,
+                sunrise: weather!.sunrise,
+                sunset: weather!.sunset,
               ),
               SizedBox(height: 10)
             ],
@@ -150,9 +152,9 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.network(weather!.weatherDescriptionIcon,
+            Image.network(weather!.weatherConditionIconUrl,
                 width: 60, height: 60),
-            Text(weather!.weatherDescription),
+            Text(weather!.weatherConditionIconDescription),
           ],
         )
       ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app_flutter/ui/home/Item_sun_time.dart';
+import 'package:weather_app_flutter/ui/home/widget/Item_sun_time.dart';
 
 class SunTime extends StatelessWidget {
   final String sunrise;

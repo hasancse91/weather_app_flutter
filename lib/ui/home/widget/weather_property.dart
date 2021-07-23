@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app_flutter/ui/home/item_weather_property.dart';
+import 'package:weather_app_flutter/ui/home/widget/item_weather_property.dart';
 
 class WeatherProperty extends StatelessWidget {
   final String humidity;
