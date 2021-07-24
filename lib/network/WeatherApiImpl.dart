@@ -26,7 +26,7 @@ class WeatherApiImpl implements WeatherApi {
         },
       );
 
-      logger.i("Response body:\n$response");
+      logger.i("Response body JSON:\n$response");
 
       WeatherResponse weatherResponse = WeatherResponse.fromJson(response.data);
       WeatherData weatherData = weatherResponse.toWeatherData();

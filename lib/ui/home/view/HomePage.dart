@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _getInputSection(),
-            if (isWeatherDataLoaded) _getBodyContent(),
+            if (isWeatherDataLoaded) _getOutputSection(),
           ],
         ),
       ),
@@ -63,22 +63,7 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             _getCityDropdown(),
-            ElevatedButton(
-              onPressed: () async {
-                try {
-                  var weatherTemp =
-                      await weatherApi.getWeatherInfo(selectedCity?.id);
-                  setState(() {
-                    weather = weatherTemp;
-                    isWeatherDataLoaded = true;
-                  });
-                } catch (e) {
-                  logger.e(e);
-                  showSnackBar(context, e.toString(), type: SnackBarType.ERROR);
-                }
-              },
-              child: Text('VIEW WEATHER'),
-            ),
+            ElevatedButton(onPressed: showWeather, child: Text('VIEW WEATHER')),
           ],
         ));
   }
@@ -98,7 +83,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _getBodyContent() {
+  _getOutputSection() {
     return Visibility(
         visible: isWeatherDataLoaded,
         child: Expanded(
@@ -118,10 +103,7 @@ class _HomePageState extends State<HomePage> {
                 visibility: weather!.visibility,
               ),
               Spacer(),
-              SunTime(
-                sunrise: weather!.sunrise,
-                sunset: weather!.sunset,
-              ),
+              SunTime(sunrise: weather!.sunrise, sunset: weather!.sunset),
               SizedBox(height: 10)
             ],
           ),
@@ -135,5 +117,18 @@ class _HomePageState extends State<HomePage> {
       cityList = data.map((city) => City.fromJson(city)).toList();
       selectedCity = cityList[0];
     });
+  }
+
+  showWeather() async {
+    try {
+      var weatherTemp = await weatherApi.getWeatherInfo(selectedCity?.id);
+      setState(() {
+        weather = weatherTemp;
+        isWeatherDataLoaded = true;
+      });
+    } catch (e) {
+      showSnackBar(context, e.toString(), type: SnackBarType.ERROR);
+      logger.e(e);
+    }
   }
 }
