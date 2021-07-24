@@ -7,6 +7,7 @@ import 'ui/home/view/HomePage.dart';
 
 void main() {
   EnvConfig prodConfig = EnvConfig(
+    appName: 'Weather Forecast - Flutter',
     baseUrl: 'http://api.openweathermap.org/data/2.5',
     appId: 'd450a4a574372bd12f2fa308bf3cf15a',
   );
@@ -21,11 +22,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-      ),
-      home: HomePage(title: 'Weather Forecast'),
+      title: BuildConfig.instance.config.appName,
+      theme: ThemeData(primarySwatch: Colors.teal),
+      home: HomePage(title: BuildConfig.instance.config.appName),
     );
   }
 }
