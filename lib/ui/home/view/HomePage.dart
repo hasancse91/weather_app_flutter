@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:logger/logger.dart';
+import 'package:weather_app_flutter/config/build_config.dart';
 import 'package:weather_app_flutter/core/app_utils.dart';
 import 'package:weather_app_flutter/network/WeatherApi.dart';
 import 'package:weather_app_flutter/network/WeatherApiImpl.dart';
@@ -21,7 +21,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final logger = Logger();
+  final logger = BuildConfig.instance.config.logger;
   List<City> cityList = [];
   City? selectedCity;
   bool isWeatherDataLoaded = false;

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:weather_app_flutter/config/build_config.dart';
 import 'package:weather_app_flutter/network/api_interceptor.dart';
 
 class DioClient {
@@ -13,7 +14,7 @@ class DioClient {
 
   DioClient._internal() {
     var options = BaseOptions(
-      baseUrl: 'http://api.openweathermap.org/data/2.5',
+      baseUrl: BuildConfig.instance.config.baseUrl,
       connectTimeout: 5000,
       receiveTimeout: 3000,
     );

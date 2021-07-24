@@ -1,11 +1,11 @@
-import 'package:logger/logger.dart';
+import 'package:weather_app_flutter/config/build_config.dart';
 import 'package:weather_app_flutter/network/WeatherApi.dart';
 import 'package:weather_app_flutter/network/dio_client.dart';
 import 'package:weather_app_flutter/ui/home/model/weather_data.dart';
 import 'package:weather_app_flutter/ui/home/model/weather_response.dart';
 
 class WeatherApiImpl implements WeatherApi {
-  var logger = Logger();
+  var logger = BuildConfig.instance.config.logger;
 
   @override
   Future<WeatherData>? getWeatherInfo(int? cityId) {

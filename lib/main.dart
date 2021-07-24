@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app_flutter/config/build_config.dart';
+import 'package:weather_app_flutter/config/env_config.dart';
+import 'package:weather_app_flutter/config/environment.dart';
 
 import 'ui/home/view/HomePage.dart';
 
 void main() {
+  EnvConfig prodConfig = EnvConfig(
+    baseUrl: 'http://api.openweathermap.org/data/2.5',
+    appId: 'd450a4a574372bd12f2fa308bf3cf15a',
+  );
+  BuildConfig.instantiate(
+    envType: Environment.DEVELOPMENT,
+    envConfig: prodConfig,
+  );
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
