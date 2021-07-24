@@ -20,10 +20,7 @@ class WeatherApiImpl implements WeatherApi {
 
       var response = await dio.get(
         'http://api.openweathermap.org/data/2.5/weather',
-        queryParameters: {
-          'id': cityId,
-          'appid': 'd450a4a574372bd12f2fa308bf3cf15a'
-        },
+        queryParameters: {'id': cityId},
       );
 
       logger.i("Response body JSON:\n$response");
