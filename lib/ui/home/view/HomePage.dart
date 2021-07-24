@@ -9,9 +9,7 @@ import 'package:weather_app_flutter/network/WeatherApi.dart';
 import 'package:weather_app_flutter/network/WeatherApiImpl.dart';
 import 'package:weather_app_flutter/ui/home/model/City.dart';
 import 'package:weather_app_flutter/ui/home/model/weather_data.dart';
-import 'package:weather_app_flutter/ui/home/widget/sun_time.dart';
-import 'package:weather_app_flutter/ui/home/widget/temperature_section.dart';
-import 'package:weather_app_flutter/ui/home/widget/weather_property.dart';
+import 'package:weather_app_flutter/ui/home/widget/weather_data_output.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -49,7 +47,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _getInputSection(),
-            if (isWeatherDataLoaded) _getOutputSection(),
+            if (isWeatherDataLoaded) WeatherDataOutput(weather: weather!),
           ],
         ),
       ),
@@ -81,33 +79,6 @@ class _HomePageState extends State<HomePage> {
         return DropdownMenuItem<City>(value: city, child: Text(city.name));
       }).toList(),
     );
-  }
-
-  _getOutputSection() {
-    return Visibility(
-        visible: isWeatherDataLoaded,
-        child: Expanded(
-          child: Column(
-            children: [
-              TemperatureSection(
-                dateTime: weather!.dateTime,
-                temperature: weather!.temperature,
-                iconUrl: weather!.weatherConditionIconUrl,
-                description: weather!.weatherConditionIconDescription,
-                cityAndCountry: weather!.cityAndCountry,
-              ),
-              SizedBox(height: 16),
-              WeatherProperty(
-                humidity: weather!.humidity,
-                pressure: weather!.pressure,
-                visibility: weather!.visibility,
-              ),
-              Spacer(),
-              SunTime(sunrise: weather!.sunrise, sunset: weather!.sunset),
-              SizedBox(height: 10)
-            ],
-          ),
-        ));
   }
 
   void readCityList() async {

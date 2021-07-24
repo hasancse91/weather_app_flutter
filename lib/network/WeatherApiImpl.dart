@@ -1,7 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:weather_app_flutter/network/WeatherApi.dart';
-import 'package:weather_app_flutter/network/api_interceptor.dart';
+import 'package:weather_app_flutter/network/dio_client.dart';
 import 'package:weather_app_flutter/ui/home/model/weather_data.dart';
 import 'package:weather_app_flutter/ui/home/model/weather_response.dart';
 
@@ -15,11 +14,9 @@ class WeatherApiImpl implements WeatherApi {
 
   Future<WeatherData> _getWeather(int? cityId) async {
     try {
-      var dio = Dio();
-      dio.interceptors.addAll(getInterceptors());
-
-      var response = await dio.get(
-        'http://api.openweathermap.org/data/2.5/weather',
+      var dioClient = DioClient().client;
+      var response = await dioClient.get(
+        '/weather',
         queryParameters: {'id': cityId},
       );
 

@@ -39,7 +39,17 @@ class TemperatureSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.network(iconUrl, width: 60, height: 60),
+            // Image.network(iconUrl, width: 60, height: 60),
+            FadeInImage(
+              width: 60,
+              height: 60,
+              image: NetworkImage(iconUrl),
+              placeholder: AssetImage("images/placeholder.png"),
+              imageErrorBuilder: (context, error, stackTrace) {
+                return Icon(Icons.error);
+              },
+              fit: BoxFit.fitWidth,
+            ),
             Text(description),
           ],
         )
