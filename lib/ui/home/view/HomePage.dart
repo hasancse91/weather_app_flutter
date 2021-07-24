@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:logger/logger.dart';
 import 'package:weather_app_flutter/core/text_style.dart';
 import 'package:weather_app_flutter/network/WeatherApi.dart';
 import 'package:weather_app_flutter/network/WeatherApiImpl.dart';
@@ -78,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                     await weatherApi.getWeatherInfo(selectedCity?.id);
                 setState(() {
                   weather = weatherTemp;
-                  Logger().d(weather);
+                  // Logger().d(weather);
                   isWeatherDataLoaded = true;
                 });
               },
