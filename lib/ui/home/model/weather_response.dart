@@ -145,7 +145,7 @@ class Clouds {
 }
 
 class Wind {
-  double? speed;
+  num? speed;
   int? deg;
   double? gust;
 

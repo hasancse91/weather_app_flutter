@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:weather_app_flutter/core/text_style.dart';
+import 'package:logger/logger.dart';
+import 'package:weather_app_flutter/core/app_utils.dart';
 import 'package:weather_app_flutter/network/WeatherApi.dart';
 import 'package:weather_app_flutter/network/WeatherApiImpl.dart';
 import 'package:weather_app_flutter/ui/home/model/City.dart';
 import 'package:weather_app_flutter/ui/home/model/weather_data.dart';
 import 'package:weather_app_flutter/ui/home/widget/sun_time.dart';
+import 'package:weather_app_flutter/ui/home/widget/temperature_section.dart';
 import 'package:weather_app_flutter/ui/home/widget/weather_property.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,11 +23,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final logger = Logger();
   List<City> cityList = [];
   City? selectedCity;
-
   bool isWeatherDataLoaded = false;
-
   WeatherData? weather;
   late WeatherApi weatherApi;
 
@@ -48,20 +49,11 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _getInputSection(),
-            if (weather != null) _getBodyContent(),
+            if (isWeatherDataLoaded) _getBodyContent(),
           ],
         ),
       ),
     );
-  }
-
-  void readCityList() async {
-    String response = await rootBundle.loadString('assets/city_list.json');
-    final data = await json.decode(response) as List<dynamic>;
-    setState(() {
-      cityList = data.map((city) => City.fromJson(city)).toList();
-      selectedCity = cityList[0];
-    });
   }
 
   _getInputSection() {
@@ -73,13 +65,17 @@ class _HomePageState extends State<HomePage> {
             _getCityDropdown(),
             ElevatedButton(
               onPressed: () async {
-                var weatherTemp =
-                    await weatherApi.getWeatherInfo(selectedCity?.id);
-                setState(() {
-                  weather = weatherTemp;
-                  // Logger().d(weather);
-                  isWeatherDataLoaded = true;
-                });
+                try {
+                  var weatherTemp =
+                      await weatherApi.getWeatherInfo(selectedCity?.id);
+                  setState(() {
+                    weather = weatherTemp;
+                    isWeatherDataLoaded = true;
+                  });
+                } catch (e) {
+                  logger.e(e);
+                  showSnackBar(context, e.toString(), type: SnackBarType.ERROR);
+                }
               },
               child: Text('VIEW WEATHER'),
             ),
@@ -93,13 +89,11 @@ class _HomePageState extends State<HomePage> {
       onChanged: (City? newCity) {
         setState(() {
           if (newCity != null) selectedCity = newCity;
+          isWeatherDataLoaded = false;
         });
       },
       items: cityList.map((City city) {
-        return DropdownMenuItem<City>(
-          value: city,
-          child: Text(city.name),
-        );
+        return DropdownMenuItem<City>(value: city, child: Text(city.name));
       }).toList(),
     );
   }
@@ -109,12 +103,14 @@ class _HomePageState extends State<HomePage> {
         visible: isWeatherDataLoaded,
         child: Expanded(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(weather!.dateTime, style: valueTextStyle),
-              _getTemperatureRow(),
-              Text(weather!.cityAndCountry,
-                  style: TextStyle(color: Colors.teal, fontSize: 20)),
+              TemperatureSection(
+                dateTime: weather!.dateTime,
+                temperature: weather!.temperature,
+                iconUrl: weather!.weatherConditionIconUrl,
+                description: weather!.weatherConditionIconDescription,
+                cityAndCountry: weather!.cityAndCountry,
+              ),
               SizedBox(height: 16),
               WeatherProperty(
                 humidity: weather!.humidity,
@@ -132,31 +128,12 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
-  _getTemperatureRow() {
-    return Row(
-      children: <Widget>[
-        Container(
-          child: Text(
-            weather!.temperature,
-            style: TextStyle(fontSize: 80, color: Colors.teal),
-          ),
-          margin: EdgeInsets.only(top: 10),
-        ),
-        Text(
-          '°C',
-          style: TextStyle(fontSize: 35, color: Colors.teal),
-        ),
-        Spacer(),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.network(weather!.weatherConditionIconUrl,
-                width: 60, height: 60),
-            Text(weather!.weatherConditionIconDescription),
-          ],
-        )
-      ],
-    );
+  void readCityList() async {
+    String response = await rootBundle.loadString('assets/city_list.json');
+    final data = await json.decode(response) as List<dynamic>;
+    setState(() {
+      cityList = data.map((city) => City.fromJson(city)).toList();
+      selectedCity = cityList[0];
+    });
   }
 }

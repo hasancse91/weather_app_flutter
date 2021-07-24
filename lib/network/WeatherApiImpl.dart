@@ -33,7 +33,6 @@ class WeatherApiImpl implements WeatherApi {
 
       return Future.value(weatherData);
     } catch (e) {
-      logger.e(e);
       throw e;
     }
   }
