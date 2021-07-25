@@ -1,0 +1,4 @@
+{
+  "baseUrl": "http://api.openweathermap.org/data/2.5",
+  "appId": "YOUR_OWN_APP_ID"
+}
