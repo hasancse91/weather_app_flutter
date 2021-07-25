@@ -35,17 +35,26 @@ class MyApp extends StatelessWidget {
 }
 
 Future<EnvConfig> getConfig() async {
+  var logger = Logger();
   try {
     String configString = await rootBundle.loadString('assets/config.json');
     final configJson = await json.decode(configString) as Map<String, dynamic>;
 
+    String baseUrl = configJson['baseUrl'];
+    String appId = configJson['appId'];
+
+    if(baseUrl.isEmpty || appId.isEmpty)
+      logger.e('Base URL and AppID should not empty. '
+          'Please follow the guideline for configuring this project.\n'
+          'Guideline: https://github.com/hasancse91/weather_app_flutter');
+
     return EnvConfig(
-      baseUrl: configJson['baseUrl'],
-      appId: configJson['appId'],
+      baseUrl: baseUrl,
+      appId: appId,
     );
   } catch (e) {
-    throw Exception('$e\nLocal configuration fetch failed. To create '
-        '`config.json` properly, please flow the instruction from README.md: '
-        'https://github.com/hasancse91/weather_app_flutter');
+    throw Exception('$e\nLocal configuration NOT found. '
+        'Please follow the guideline for configuring this project.\n'
+        'Guideline: https://github.com/hasancse91/weather_app_flutter');
   }
 }
