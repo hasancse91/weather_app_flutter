@@ -4,7 +4,7 @@ import 'package:weather_app_flutter/network/dio_client.dart';
 import 'package:weather_app_flutter/ui/home/model/weather_data.dart';
 import 'package:weather_app_flutter/ui/home/model/weather_response.dart';
 
-class WeatherApiImpl implements WeatherApi {
+class WeatherApiImpl extends WeatherApi {
   var logger = BuildConfig.instance.config.logger;
 
   @override
@@ -24,8 +24,7 @@ class WeatherApiImpl implements WeatherApi {
 
       WeatherResponse weatherResponse = WeatherResponse.fromJson(response.data);
       WeatherData weatherData = weatherResponse.toWeatherData();
-
-      return Future.value(weatherData);
+      return weatherData;
     } catch (e) {
       throw e;
     }

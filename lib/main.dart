@@ -21,7 +21,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final String appTitle = 'Weather App - Flutter';
+  final String appTitle = 'Weather Forecast - Flutter';
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
       title: appTitle,
       theme: ThemeData(primarySwatch: Colors.teal),
       home: HomePage(title: appTitle),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
