@@ -17,7 +17,7 @@ We will use [Open Weather Map API](https://openweathermap.org/api) for collectin
 ### Project Setup
 Clone the project and open it using Android Studio. Then create a file `config.json` inside `assets` folder. Add `baseUrl` and `appId` JSON field inside the parent JSON object.
 
-<img src="https://raw.githubusercontent.com/hasancse91/weather_app_flutter/master/data/screenshot_1.png" width="1008" height="392" />
+<img src="https://raw.githubusercontent.com/hasancse91/weather_app_flutter/master/data/screenshot_1.png" width="672" height="261" />
 
 #### Use Sample API without creating account
 Add below lines at your `config.json` file. Then run the project. You'll get dummy or static API response from Open Weather API.
