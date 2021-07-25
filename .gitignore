@@ -44,3 +44,6 @@ app.*.map.json
 /android
 /ios
 /web
+
+# Custom file and directory
+/assets/config.json
