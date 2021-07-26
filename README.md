@@ -32,7 +32,7 @@ After Sign up at the website collect your own `APP ID` from their [API Keys page
 ```
 {
   "baseUrl": "http://api.openweathermap.org/data/2.5",
-  "appId": "<YOUR WON APP ID>"
+  "appId": "<YOUR OWN APP ID>"
 }
 ```
 The BASE URL and APP ID will be fetched from `main.dart` file and will be stored it in our local configuration file.
@@ -41,5 +41,5 @@ The BASE URL and APP ID will be fetched from `main.dart` file and will be stored
 ### Run the project
 Run `flutter pub get` to sync the packages. Then run the app to your real device or emulator.
 ### Disclaimer
-This is my first project in Flutter. So there are lots of things to improve. It is not guaranteed about the best practices and Flutter convention in this project. Please don't use this project as a reference or as a boilerplate of your other project.
+This is my first project in Flutter. So there are lots of things to improve. It is not guaranteed about the best practices and Flutter convention in this project. Please don't use this project as a reference or as a boilerplate of your other project. For the sake of simplicity, I avoided to use Bloc, GetX etc. Next time I'll create different repositories for them.
 Feel free to create issues for improvement.Thanks.
